@@ -18,16 +18,15 @@ class Config:
     PINECONE_ENVIRONMENT = os.getenv("PINECONE_ENVIRONMENT")
     PINECONE_API_URL = os.getenv("PINECONE_API_URL")
 
-    # Groq API for LLM inference
-    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-    GROQ_MODEL = "llama3-8b-8192"  # Modify based on your selected Groq model
-    GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
+    # Google Gemini configuration
+    GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+    GEMINI_MODEL = "gemini-1.5-pro"  # Google's Gemini Pro model
 
     @staticmethod
     def check_config():
         """Ensure all required environment variables are set."""
         required_vars = [
-            "NVIDIA_API_KEY", "PINECONE_API_KEY", "PINECONE_ENVIRONMENT", "PINECONE_INDEX", "GROQ_API_KEY"
+            "NVIDIA_API_KEY", "PINECONE_API_KEY", "PINECONE_ENVIRONMENT", "PINECONE_INDEX", "GOOGLE_API_KEY"
         ]
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:

@@ -21,3 +21,30 @@ def query_documents(query, top_k=3):
     """Retrieve the top_k most similar documents from Pinecone using LangChain."""
     results = vector_store.similarity_search(query, k=top_k)
     return results
+
+def get_recent_documents(limit=3):
+    """Retrieve the most recently added documents from Pinecone."""
+    # Fetch all vectors and sort by timestamp in metadata
+    results = index.query(
+        vector=[0] * embedding_model.embedding_dimension,  # Dummy vector
+        top_k=100,  # Fetch enough to find recent ones
+        include_metadata=True
+    )
+    
+    # Sort by timestamp if available in metadata
+    sorted_results = sorted(
+        results.matches,
+        key=lambda x: x.metadata.get('timestamp', 0),
+        reverse=True
+    )
+    
+    # Convert to LangChain document format
+    documents = []
+    for match in sorted_results[:limit]:
+        doc = vector_store.similarity_search(
+            match.id,
+            k=1
+        )[0]
+        documents.append(doc)
+        
+    return documents

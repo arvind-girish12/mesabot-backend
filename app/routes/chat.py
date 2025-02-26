@@ -11,13 +11,14 @@ def chat():
     """Handles user queries, retrieves relevant documents, formats prompt, and generates response."""
     data = request.json
     user_query = data.get("message")
+    chat_history = data.get("memory", "")  # Get chat history from request
 
     if not user_query:
         return jsonify({"error": "Message is required"}), 400
 
     try:
-        # Run RAG process (retrieve context + generate answer)
-        response = run_rag(user_query)
+        # Run RAG process with chat history context
+        response = run_rag(user_query, chat_history)
 
         return jsonify({"response": response}), 200
 
